@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SchoolAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,36 +14,51 @@ namespace SchoolAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
+        private SchoolContext _context = new SchoolContext();
+
         // GET: api/<StudentController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Student> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _context.Students.ToList();
         }
 
+
         // GET api/<StudentController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{ID}")]
+        public Student Get(int id)
         {
-            return "value";
+            return _context.Students
+                .Where(student => student.StudentID == id)
+                .FirstOrDefault();
+            
         }
+
 
         // POST api/<StudentController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Student student)
         {
+            student.StudentID = _context.Students.Select(student => student.StudentID).Max() + 1;
+            
+            _context.Students.Add(student);
+            _context.SaveChanges();
+            return Ok();
         }
 
-        // PUT api/<StudentController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         // DELETE api/<StudentController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //[httpdelete("{id}")]
+        //public iactionresult delete(int id)
+        //{
+
+        //    _context.remove(_context.students
+        //        .where(s => s.studentid == id)
+        //        .firstordefault());
+
+        //    _context.savechanges();
+        //    return ok();
+
+        //}
     }
 }

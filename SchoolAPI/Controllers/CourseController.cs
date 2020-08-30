@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SchoolAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,36 +13,47 @@ namespace SchoolAPI.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
+        private SchoolContext _context;
+
         // GET: api/<CourseController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Course> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _context.Courses.ToList();
         }
+
 
         // GET api/<CourseController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Course Get(int id)
         {
-            return "value";
+            return _context.Courses
+                .Where(course => course.CourseID == id)
+                .FirstOrDefault();
         }
+
 
         // POST api/<CourseController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Course course)
         {
+            course.CourseID = _context.Courses.Select(course => course.CourseID).Max() + 1;
+            _context.Courses.Add(course);
+            _context.SaveChanges();
+            return Ok();
         }
 
-        // PUT api/<CourseController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         // DELETE api/<CourseController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //[HttpDelete("{id}")]
+        //public IActionResult Delete(int id)
+        //{
+        //    _context.Remove(_context.Courses
+        //        .Where(course => course.CourseID == id)
+        //        .FirstOrDefault());
+
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
     }
 }

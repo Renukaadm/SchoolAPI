@@ -9,12 +9,29 @@ namespace SchoolAPI
 {
     public class SchoolContext : DbContext
     {
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Student> Students { get; set; }
-        public DbSet<StudentCourse> StudentCourses { get; set; }
-
         public SchoolContext(DbContextOptions<SchoolContext> options)
         : base(options) { }
+
+        public SchoolContext()
+        {
+        }
+
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+
+        //}
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseInMemoryDatabase("SchoolDB");
+        //    base.OnConfiguring(optionsBuilder);
+        //}
+
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
+
+        
 
         
     }

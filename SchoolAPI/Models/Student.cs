@@ -11,6 +11,6 @@ namespace SchoolAPI.Models
         [Key]
         public int StudentID { get; set; }
         public string Name { get; set; }
-        public List<StudentCourse> studentCourses { get; set; }
+        public virtual ICollection<StudentCourse> studentCourses { get; set; }
     }
 }
