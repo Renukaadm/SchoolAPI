@@ -35,7 +35,6 @@ namespace SchoolAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] StudentCourse studentCourse)
         {
-            studentCourse.StudentCourseID = _context.StudentCourses.Select(sc => sc.StudentCourseID).Max() + 1;
             _context.StudentCourses.Add(studentCourse);
             _context.SaveChanges();
             return Ok();

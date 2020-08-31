@@ -37,7 +37,6 @@ namespace SchoolAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Course course)
         {
-            course.CourseID = _context.Courses.Select(course => course.CourseID).Max() + 1;
             _context.Courses.Add(course);
             _context.SaveChanges();
             return Ok();
@@ -45,15 +44,15 @@ namespace SchoolAPI.Controllers
 
 
         // DELETE api/<CourseController>/5
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    _context.Remove(_context.Courses
-        //        .Where(course => course.CourseID == id)
-        //        .FirstOrDefault());
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            _context.Remove(_context.Courses
+                .Where(course => course.CourseID == id)
+                .FirstOrDefault());
 
-        //    _context.SaveChanges();
-        //    return Ok();
-        //}
+            _context.SaveChanges();
+            return Ok();
+        }
     }
 }
