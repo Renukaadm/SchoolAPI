@@ -13,7 +13,7 @@ namespace SchoolAPI.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
-        private SchoolContext _context;
+        private SchoolContext _context = new SchoolContext();
 
         // GET: api/<CourseController>
         [HttpGet]
