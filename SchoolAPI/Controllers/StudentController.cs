@@ -47,7 +47,7 @@ namespace SchoolAPI.Controllers
 
          //DELETE api/<StudentController>/5
         [HttpDelete("{id}")]
-        public IActionResult delete(int id)
+        public IActionResult Delete(int id)
         {
 
             _context.Remove(_context.Students
