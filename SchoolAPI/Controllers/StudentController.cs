@@ -39,8 +39,6 @@ namespace SchoolAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Student student)
         {
-            //student.StudentID = _context.Students.Select(student => student.StudentID).Max() + 1;
-            
             _context.Students.Add(student);
             _context.SaveChanges();
             return Ok();
