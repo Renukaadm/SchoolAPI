@@ -21,11 +21,11 @@ namespace SchoolAPI
 
         //}
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseInMemoryDatabase("SchoolDB");
-        //    base.OnConfiguring(optionsBuilder);
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseInMemoryDatabase("SchoolDB");
+            base.OnConfiguring(optionsBuilder);
+        }
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }

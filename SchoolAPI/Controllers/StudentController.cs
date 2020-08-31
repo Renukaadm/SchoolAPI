@@ -39,26 +39,24 @@ namespace SchoolAPI.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Student student)
         {
-            student.StudentID = _context.Students.Select(student => student.StudentID).Max() + 1;
-            
             _context.Students.Add(student);
             _context.SaveChanges();
             return Ok();
         }
 
 
-        // DELETE api/<StudentController>/5
-        //[httpdelete("{id}")]
-        //public iactionresult delete(int id)
-        //{
+         //DELETE api/<StudentController>/5
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
 
-        //    _context.remove(_context.students
-        //        .where(s => s.studentid == id)
-        //        .firstordefault());
+            _context.Remove(_context.Students
+                .Where(s => s.StudentID == id)
+                .FirstOrDefault());
 
-        //    _context.savechanges();
-        //    return ok();
+            _context.SaveChanges();
+            return Ok();
 
-        //}
+        }
     }
 }
