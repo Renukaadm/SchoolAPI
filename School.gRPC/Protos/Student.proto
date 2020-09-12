@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option csharp_namespace = "School.gRPC.Protos";
+
+//import "google/protobuf/timestamp.proto";	
+import "google/protobuf/wrappers.proto";	
+import "google/protobuf/empty.proto";
+
+service Student {
+	rpc GetStudent (StudentIDRequest) returns (StudentReply);
+	//rpc GetStudents (google.protobuf.Empty) returns (Students);	   
+	//Create
+	rpc AddStudent (StudentReply) returns(google.protobuf.Empty);	   
+	//Update
+	//rpc UpdateStudent (StudentReply) returns(google.protobuf.Empty);	   
+	//Delete
+	rpc DeleteStudent (StudentReply) returns(google.protobuf.Empty);
+}
+
+message StudentIDRequest {
+  int32 StudentID = 1;
+}
+
+// The response message containing the greetings.
+message StudentReply {
+  int32 StudentID = 1;
+  string Name = 2;
+}
+
+message Students {
+	repeated StudentReply students = 1;
+}
