@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SchoolAPI.Logic;
 using SchoolAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,32 +14,35 @@ namespace SchoolAPI.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
-        private SchoolContext _context = new SchoolContext();
+        //private SchoolContext _context = new SchoolContext();
+        private CourseLogic _courseLogic;
+
+        public CourseController()
+        {
+            _courseLogic = new CourseLogic(new EFGenericRepository<CoursePoco>());
+        }
 
         // GET: api/<CourseController>
         [HttpGet]
-        public IEnumerable<Course> Get()
+        public IEnumerable<CoursePoco> Get()
         {
-            return _context.Courses.ToList();
+            return _courseLogic.GetAll();
         }
 
 
         // GET api/<CourseController>/5
         [HttpGet("{id}")]
-        public Course Get(int id)
+        public CoursePoco Get(int id)
         {
-            return _context.Courses
-                .Where(course => course.CourseID == id)
-                .FirstOrDefault();
+            return _courseLogic.GetSingle(id);
         }
 
 
         // POST api/<CourseController>
         [HttpPost]
-        public IActionResult Post([FromBody] Course course)
+        public IActionResult Post([FromBody] CoursePoco course)
         {
-            _context.Courses.Add(course);
-            _context.SaveChanges();
+            _courseLogic.Add(course);
             return Ok();
         }
 
@@ -47,11 +51,7 @@ namespace SchoolAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _context.Remove(_context.Courses
-                .Where(course => course.CourseID == id)
-                .FirstOrDefault());
-
-            _context.SaveChanges();
+            _courseLogic.Remove(id);
             return Ok();
         }
     }

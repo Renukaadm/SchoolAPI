@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace SchoolAPI.Models
 {
-    public class Course
+    public class StudentPoco
     {
         [Key]
-        public int CourseID { get; set; }
-        public string CourseName { get; set; }
-        public virtual ICollection<StudentCourse> studentCourses { get; set; }
-
+        public int StudentID { get; set; }
+        public string Name { get; set; }
+        public ICollection<StudentCoursePoco> studentCourses { get; set; }
     }
 }

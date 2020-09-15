@@ -16,10 +16,21 @@ namespace SchoolAPI
         {
         }
 
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<StudentCoursePoco>().HasKey(sc => new { sc.StudentID, sc.CourseID });
 
-        //}
+            builder.Entity<StudentCoursePoco>()
+                .HasOne<StudentPoco>(sc => sc.Student)
+                .WithMany(s => s.studentCourses)
+                .HasForeignKey(sc => sc.StudentID);
+
+
+            builder.Entity<StudentCoursePoco>()
+                .HasOne<CoursePoco>(sc => sc.Course)
+                .WithMany(s => s.studentCourses)
+                .HasForeignKey(sc => sc.CourseID);
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,9 +38,9 @@ namespace SchoolAPI
             base.OnConfiguring(optionsBuilder);
         }
 
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<StudentCourse> StudentCourses { get; set; }
+        public DbSet<StudentPoco> Students { get; set; }
+        public DbSet<CoursePoco> Courses { get; set; }
+        public DbSet<StudentCoursePoco> StudentCourses { get; set; }
 
         
 

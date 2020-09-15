@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SchoolAPI.Models
 {
-    public class StudentCourse
+    public class StudentCoursePoco
     {
         [Key]
         public int StudentCourseID { get; set; }
@@ -16,7 +16,7 @@ namespace SchoolAPI.Models
         [ForeignKey("Course")]
         public int CourseID { get; set; }
 
-        public virtual Student student { get; set; }
-        public virtual Course course { get; set; }
+        public StudentPoco Student { get; set; }
+        public CoursePoco Course { get; set; }
     }
 }

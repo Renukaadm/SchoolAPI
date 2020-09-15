@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SchoolAPI.Models;
+using SchoolAPI.Logic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,33 +15,34 @@ namespace SchoolAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
-        private SchoolContext _context = new SchoolContext();
+        private StudentLogic _studentLogic;
 
+        public StudentController()
+        {
+            _studentLogic = new StudentLogic(new EFGenericRepository<StudentPoco>());
+        }
         // GET: api/<StudentController>
         [HttpGet]
-        public IEnumerable<Student> Get()
+        public IEnumerable<StudentPoco> Get()
         {
-            return _context.Students.ToList();
+            return _studentLogic.GetAll();
         }
 
+   
 
         // GET api/<StudentController>/5
         [HttpGet("{ID}")]
-        public Student Get(int id)
+        public StudentPoco Get(int id)
         {
-            return _context.Students
-                .Where(student => student.StudentID == id)
-                .FirstOrDefault();
-            
+            return _studentLogic.GetSingle(id);
         }
 
 
         // POST api/<StudentController>
         [HttpPost]
-        public IActionResult Post([FromBody] Student student)
+        public IActionResult Post([FromBody] StudentPoco student)
         {
-            _context.Students.Add(student);
-            _context.SaveChanges();
+            _studentLogic.Add(student);
             return Ok();
         }
 
@@ -49,12 +51,7 @@ namespace SchoolAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-
-            _context.Remove(_context.Students
-                .Where(s => s.StudentID == id)
-                .FirstOrDefault());
-
-            _context.SaveChanges();
+            _studentLogic.Remove(id);
             return Ok();
 
         }

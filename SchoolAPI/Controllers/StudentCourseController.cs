@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SchoolAPI.Logic;
 using SchoolAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,30 +14,32 @@ namespace SchoolAPI.Controllers
     [ApiController]
     public class StudentCourseController : ControllerBase
     {
-        private SchoolContext _context;
+        private StudentCourseLogic _studentCourseLogic;
+
+        public StudentCourseController()
+        {
+            _studentCourseLogic = new StudentCourseLogic(new EFGenericRepository<StudentCoursePoco>());
+        }
 
         // GET: api/<StudentCourseController>
         [HttpGet]
-        public IEnumerable<StudentCourse> Get()
+        public IEnumerable<StudentCoursePoco> Get()
         {
-            return _context.StudentCourses.ToList();
+            return _studentCourseLogic.GetAll();
         }
 
         // GET api/<StudentCourseController>/5
         [HttpGet("{id}")]
-        public StudentCourse Get(int id)
+        public StudentCoursePoco Get(int id)
         {
-            return _context.StudentCourses
-                .Where(StudentCourse => StudentCourse.StudentCourseID == id)
-                .FirstOrDefault();
+            return _studentCourseLogic.GetSingle(id);
         }
 
         // POST api/<StudentCourseController>
         [HttpPost]
-        public IActionResult Post([FromBody] StudentCourse studentCourse)
+        public IActionResult Post([FromBody] StudentCoursePoco studentCourse)
         {
-            _context.StudentCourses.Add(studentCourse);
-            _context.SaveChanges();
+            _studentCourseLogic.Add(studentCourse);
             return Ok();
         }
 
@@ -44,11 +47,7 @@ namespace SchoolAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _context.Remove(_context.StudentCourses
-                .Where(sc => sc.StudentCourseID == id)
-                .FirstOrDefault());
-
-            _context.SaveChanges();
+            _studentCourseLogic.Remove(id);
             return Ok();
         }
     }

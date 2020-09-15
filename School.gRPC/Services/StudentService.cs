@@ -1,22 +1,23 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using School.gRPC.Protos;
+using SchoolAPI.Logic;
+using SchoolAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static School.gRPC.Protos.Student;
-using SchoolAPI.Controllers;
 
 namespace School.gRPC.Services
 {
     public class StudentService : StudentBase
     {
-        private StudentController _studentController = new StudentController();
+        private StudentLogic _logic = new StudentLogic(new EFGenericRepository<StudentPoco>());
         public override Task<StudentReply> GetStudent(StudentIDRequest request, ServerCallContext context)
         {
-            SchoolAPI.Models.Student studentPoco =  _studentController.Get(request.StudentID);
-            StudentReply studentReply =  new StudentReply()
+            StudentPoco studentPoco = _logic.GetSingle(request.StudentID);
+            StudentReply studentReply = new StudentReply()
             {
                 StudentID = studentPoco.StudentID,
                 Name = studentPoco.Name
@@ -32,21 +33,22 @@ namespace School.gRPC.Services
         }*/
         public override Task<Empty> AddStudent(StudentReply request, ServerCallContext context)
         {
-            SchoolAPI.Models.Student studentPoco = new SchoolAPI.Models.Student()
+            StudentPoco studentPoco = new StudentPoco()
             {
                 StudentID = request.StudentID,
                 Name = request.Name
             };
-            _studentController.Post(studentPoco);
+            _logic.Add(studentPoco);
 
             return Task.FromResult<Empty>(null);
         }
 
         public override Task<Empty> DeleteStudent(StudentReply request, ServerCallContext context)
         {
-            _studentController.Delete(request.StudentID);
+            _logic.Remove(request.StudentID);
 
             return Task.FromResult<Empty>(null);
         }
     }
 }
+
