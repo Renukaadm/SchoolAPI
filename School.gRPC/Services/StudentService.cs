@@ -27,10 +27,21 @@ namespace School.gRPC.Services
             return Task.FromResult(studentReply);
         }
 
-        /*public override Task<Students> GetStudents(Empty request, ServerCallContext context)
+        public override Task<Students> GetStudents(Empty request, ServerCallContext context)
         {
-            return Task.FromResult<Empty>(null);
-        }*/
+            List<StudentPoco> studentPocos = _logic.GetAll().ToList();
+            Students studentCollection = new Students();
+            foreach (StudentPoco studentPoco in studentPocos)
+            {
+                studentCollection.StudRep.Add(new StudentReply
+                {
+                    StudentID = studentPoco.StudentID,
+                    Name = studentPoco.Name
+                });
+            }
+            return Task.FromResult<Students>(studentCollection);
+        }
+
         public override Task<Empty> AddStudent(StudentReply request, ServerCallContext context)
         {
             StudentPoco studentPoco = new StudentPoco()

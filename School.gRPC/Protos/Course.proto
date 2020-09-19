@@ -22,5 +22,5 @@ message CourseReply {
 }
 
 message Courses {
-	repeated CourseReply Courses = 1;
+	repeated CourseReply CouRep = 1;
 }

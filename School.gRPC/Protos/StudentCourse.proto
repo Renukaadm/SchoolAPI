@@ -28,5 +28,5 @@ message StudentCourseReply {
 }
 
 message StudentCourses {
-	repeated StudentCourseReply StudentCourses = 1;
+	repeated StudentCourseReply StudCour = 1;
 }
